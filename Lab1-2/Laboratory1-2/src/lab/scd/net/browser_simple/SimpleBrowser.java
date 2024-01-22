@@ -3,12 +3,7 @@
  */
 package lab.scd.net.browser_simple;
 
-/**
- * Class created by @author Mihai HULEA at Feb 25, 2005.
- * 
- * This class is part of the laborator2_net project.
- * 
- */
+
 
 import javax.swing.*;
 
@@ -21,15 +16,8 @@ public static void main(String[] args) {
     
     Properties props = System.getProperties();
 
-    //eliminati comentariile in cazul in care folosti un proxy 
-    /*
-    props.put("http.proxyHost","193.226.5.55");
-    props.put("http.proxyPort","3128");
-*/
-    // get the first URL
 	String initialPage = "http://google.com";
-	//if (args.length > 0) initialPage = args[0];
-	// set up the editor pane
+
 	JEditorPane jep = new JEditorPane( );
 	jep.setEditable(false);
 	jep.addHyperlinkListener(new LinkFollower(jep));

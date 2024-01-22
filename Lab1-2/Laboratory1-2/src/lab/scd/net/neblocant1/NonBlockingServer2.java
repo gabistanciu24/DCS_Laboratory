@@ -14,52 +14,43 @@ import java.nio.charset.*;
 import java.net.*;
 import java.util.*;
 
-/**
- * @author mihai
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public class NonBlockingServer2 {
 
 	public static void main(String[] args) throws Exception{
 		
-//		 Create the server socket channel
+
 		ServerSocketChannel server = ServerSocketChannel.open();
-//		 nonblocking I/O
+
 		server.configureBlocking(false);
-//		 host-port 8000
-		server.socket().bind(new java.net.InetSocketAddress("localhost",8000));
+
+		server.socket().bind(new InetSocketAddress("localhost",8000));
 		System.out.println("Server waiting on port 8000");
-//		 Create the selector
+
 		Selector selector = Selector.open();
-//		 Recording server to selector (type OP_ACCEPT)
+
 		server.register(selector,SelectionKey.OP_ACCEPT);
-		
-//		 Infinite server loop
+
 		
 		for(;;) {
 	      Thread.sleep(1000);
-		  // Waiting for events
+
 		  System.err.println("wait for event...");
 		  selector.select();
 		  
-		  // Get keys
+
 		  Set keys = selector.selectedKeys();
 		  Iterator i = keys.iterator();
 		  System.err.println("keys size="+keys.size());
-		  // For each keys...
+
 		  while(i.hasNext()) {
 		  	
-		  	// Obtain the interest of the key
+
 		    SelectionKey key = (SelectionKey) i.next();
 
-		    // Remove the current key
 		    i.remove();
 		    
 		    		    
-		    // if isAccetable = true
-		    // then a client required a connection
+
 		    if (key.isAcceptable()) {
 		      System.err.println("Key is of type acceptable");	
 		      // get client socket channel

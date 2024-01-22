@@ -6,12 +6,6 @@
  */
 package lab.scd.net.neblocant1;
 
-/**
- * @author mihai
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
@@ -39,7 +33,6 @@ public class NonBlockingServer {
     }
 
     public void initialize() throws IOException {
-    	//A Selector object can be created using itself as a factory or using a SelectorProvider factory
     	this.selector = SelectorProvider.provider().openSelector();
         
         this.selectableChannel = ServerSocketChannel.open();

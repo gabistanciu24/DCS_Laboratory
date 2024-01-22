@@ -13,63 +13,51 @@ import java.nio.channels.spi.*;
 import java.nio.charset.*;
 import java.net.*;
 import java.util.*;
-/**
- * @author mihai
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
+
 public class NonBlockingClient {
 	
 	
 	public static void main(String[] args) throws IOException {
 
-		
-//		 Create client SocketChannel
 		SocketChannel client = SocketChannel.open();
 
-//		 nonblocking I/O
 		client.configureBlocking(false);
 
-//		 Connection to host port 8000
-		client.connect(new java.net.InetSocketAddress("localhost",8000));
+		client.connect(new InetSocketAddress("localhost",8000));
 
-//		 Create selector
 		Selector selector = Selector.open();
 
-//		 Record to selector (OP_CONNECT type)
+
 		SelectionKey clientKey = client.register(selector, SelectionKey.OP_CONNECT);
 
-//		 Waiting for the connection
+
 		while (selector.select(500)> 0) {
 			
 		  System.err.println("Start communication...");
 		  
-		  // Get keys
+
 		  Set keys = selector.selectedKeys();
 		  Iterator i = keys.iterator();
 
-		  // For each key...
+
 		  while (i.hasNext()) {
 		    SelectionKey key = (SelectionKey)i.next();
 
-		    // Remove the current key
+
 		    i.remove();
 
-		    // Get the socket channel held by the key
 		    SocketChannel channel = (SocketChannel)key.channel();
 
-		    // Attempt a connection
+
 		    if (key.isConnectable()) {
 
-		      // Connection OK
+
 		      System.out.println("Server Found");
 
-		      // Close pendent connections
+
 		      if (channel.isConnectionPending())
 		        channel.finishConnect();
 
-		      // Write continuously on the buffer
 		      ByteBuffer buffer = null;
 		      int x=0;
 		      for (;x<7;) {

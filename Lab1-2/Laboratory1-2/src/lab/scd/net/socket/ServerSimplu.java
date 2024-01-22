@@ -1,69 +1,75 @@
 package lab.scd.net.socket;
-import java.net.*;
 import java.io.*;
-
-public class ClientSimplu {
-
-  public static void main(String[] args)throws Exception{
-    Socket socket=null;
-    try {
-      //creare obiect address care identifica adresa serverului
-      InetAddress server_address =InetAddress.getByName("172.20.10.2");//("192.168.56.1");//("192.168.181.251");
-      //se putea utiliza varianta alternativa: InetAddress.getByName("127.0.0.1")
-
-      socket = new Socket(server_address,1900);
-
-      //construieste fluxul de intrare prin care sunt receptionate datele de la server
-      BufferedReader in =
-              new BufferedReader(
-                      new InputStreamReader(
-                              socket.getInputStream()));
-
-      //construieste fluxul de iesire prin care datele sunt trimise catre server
-      // Output is automatically flushed
-      // by PrintWriter:
-      PrintWriter out =
-              new PrintWriter(
-                      new BufferedWriter(
-                              new OutputStreamWriter(
-                                      socket.getOutputStream())),true);
-
-      int x = 5;
-      int y = 17;
-      //for(int i = 0; i < 10; i ++) {
-      out.println(x);
-      out.flush();
-      out.println(y);
-      out.flush();
-      out.println("result");
-      out.flush();
-
-
-      //}
-      /*for(int i = 0; i < 2; i++) {
-      String str = "";
-      str = in.readLine(); //trimite mesaj
-      System.out.println(str); //asteapta raspuns
-
-      }*/
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 
 
-      String str = "";
+public class ServerSimplu {
+  public static void main(String[] args) throws IOException{
 
-      str = in.readLine(); //trimite mesaj
-      System.out.println(str); //asteapta raspuns
+    ServerSocket ss=null;
+    Socket s=null;
 
-      str = in.readLine(); //trimite mesaj
-      System.out.println(str); //asteapta raspuns
+    try{
+      String line="";
+      ss = new ServerSocket(1900); //creaza obiectul serversocket
+      System.out.println("Serverul asteapta conexiuni...");
+      s = ss.accept(); //incepe asteptarea de conexiuni  pe portul 1900
+      //in momentul in care un client s-a  conectat ss.accept() returneaza
+      //un obiect de tip Socket care identifica conexiunea
 
-      str = in.readLine(); //trimite mesaj
-      System.out.println(str); //asteapta raspuns
-      out.println("END"); //trimite mesaj care determina serverul sa inchida conexiunea
-    }
-    catch (Exception ex) {ex.printStackTrace();}
+      //creaza fluxurile de intrare iesire
+      BufferedReader in = new BufferedReader(
+              new InputStreamReader(s.getInputStream()));
+
+      PrintWriter out = new PrintWriter(
+              new BufferedWriter(new OutputStreamWriter(
+                      s.getOutputStream())),true);
+
+      //extrage adresa de ip si portul de pe care clientul s-a conectat
+      InetSocketAddress remoteadr = (InetSocketAddress)s.getRemoteSocketAddress();
+      String remotehost = remoteadr.getHostName();
+      int remoteport = remoteadr.getPort();
+
+      System.out.println("Client nou conectat: "+remotehost+":"+remoteport);
+
+      int intArray[] = new int[2];
+      int i=0;
+      float p=0.0f;
+
+      while(!line.equals("END")){
+        line = in.readLine(); //citeste datele de la client
+        if(i<2) {
+          intArray[i]=Integer.parseInt(line);
+          i++;
+          System.out.println("Server a receptionat:"+line);
+          out.println("ECHO "+line); //trimite date la client
+          out.flush();
+        }
+        else
+        {
+          p=(float)intArray[1]/((float)intArray[0]*100);
+          out.println(Float.toString(p)); //trimite date la client
+          out.flush();
+        }
+
+
+      }
+      //float p=(float)intArray[1]/((float)intArray[0]*100);
+
+
+      System.out.println("p= "+p);
+      System.out.println("Aplicatie server gata.");
+
+
+    }catch(Exception e){e.printStackTrace();}
     finally{
-      socket.close();
+      ss.close();
+      if(s!=null) s.close();
     }
   }
 }

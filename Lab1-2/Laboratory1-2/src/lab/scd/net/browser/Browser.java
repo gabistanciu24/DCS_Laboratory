@@ -3,12 +3,7 @@
  */
 package lab.scd.net.browser;
 
-/**
- * Class created by @author Mihai HULEA at Feb 25, 2005.
- * 
- * This class is part of the laborator2_net project.
- * 
- */
+
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.*;

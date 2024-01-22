@@ -34,7 +34,6 @@ public class MulticastClient extends Thread{
         try{
             
         MulticastSocket socket = new MulticastSocket(port);
-        //pregateste aplicatia client pentru a putea receptiona mesaje multicast
         InetAddress group = InetAddress.getByName("230.0.0.1");
         socket.joinGroup(group);
 
@@ -42,13 +41,11 @@ public class MulticastClient extends Thread{
         while(alive){
         	byte[] buf = new byte[256];
             packet = new DatagramPacket(buf, buf.length);
-            //asteapta receptionarea de pachete
             socket.receive(packet);
             
-            //extrage continultul mesajlui din pachet
+
             String received = new String(packet.getData());
-            
-            //afiseaza mesajul
+
             System.out.println("rcv: " + received);
         }
         socket.leaveGroup(group);
@@ -77,21 +74,18 @@ public class MulticastClient extends Thread{
         
      
        
-        //start listening for brodcasted messages
+
         MulticastClient mc = new MulticastClient(4446);
         mc.start();
-        
-        
-        //intr-o bucla while citeste de la tastatura linii de text
+
         String msg="";
         while(!msg.equals("exit")){
             
 	        BufferedReader sb = new BufferedReader(new InputStreamReader(System.in));
 	        System.out.print("snd:");
-	        //citeste o linie de la tastatura
+
 	        msg = sb.readLine();
 	        try{
-	         //trimte mesajul catre serverul multicast   
 	         mc.sendMessage(msg,"127.0.0.1");
 	        }catch(Exception e){
 	            System.err.println("Error sending message:"+e.getMessage());

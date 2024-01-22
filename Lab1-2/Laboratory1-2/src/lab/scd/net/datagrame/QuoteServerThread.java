@@ -3,12 +3,6 @@
  */
 package lab.scd.net.datagrame;
 
-/**
- * Class created by @author Mihai HULEA at Feb 23, 2005.
- * 
- * This class is part of the laborator2_sockettest project.
- * 
- */
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -43,8 +37,7 @@ public class QuoteServerThread extends Thread {
                     // receive request
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                
-                    // figure out response
+
                 String dString = null;
                 if (in == null)
                     dString = new Date().toString();
@@ -52,7 +45,7 @@ public class QuoteServerThread extends Thread {
                     dString = getNextQuote();
                 buf = dString.getBytes();
 
-		    // send the response to the client at "address" and "port"
+
                 InetAddress address = packet.getAddress();
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);

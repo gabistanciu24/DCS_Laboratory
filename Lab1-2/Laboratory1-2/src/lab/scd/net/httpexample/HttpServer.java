@@ -3,19 +3,12 @@
  */
 package lab.scd.net.httpexample;
 
-/**
- * Class created by @author Mihai HULEA at Feb 23, 2005.
- * 
- * This class is part of the laborator2_sockettest project.
- * 
- */
 import java.io.*;
 import java.net.*;
 import java.util.StringTokenizer;
 
 public class HttpServer extends Thread
-{
-	//portul standard
+
 	private final static int PORT = 80;
 	
 	private final String iniContext="c:/temp/ServerHTTP/webdocs";
@@ -23,7 +16,7 @@ public class HttpServer extends Thread
 	
 	private ServerSocket ss;
 	
-	//constructor
+
 	HttpServer()throws Exception{
 		System.out.println("Start server http.");
 		ss = new ServerSocket(PORT);
@@ -34,13 +27,12 @@ public class HttpServer extends Thread
 	public void run(){
 		while(alive){
 			
-			//asteapta conexiuni
+
 			try{
 			System.out.println("Server asteapta...");
 			new ProcesRequest(ss.accept(),iniContext);
 				
 			}catch(IOException e){System.err.println("EROARE CONECTARE:"+e.getMessage());}
-			//..reia bucla de asteptare dupa ce am creat un fir pentru client
 		}
 		System.out.println("STOP SERVER");
 	}
